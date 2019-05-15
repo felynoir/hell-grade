@@ -6,7 +6,7 @@ export default () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/" exact component={LandingPage} />
+        <Route path={['/', '/register']} exact component={LandingPage} />
       </Switch>
     </BrowserRouter>
   );

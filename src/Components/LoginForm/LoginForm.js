@@ -1,22 +1,40 @@
 import React, { Fragment } from 'react';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button, Icon, Label } from 'semantic-ui-react';
 import { Box, Card, Text, Flex } from 'rebass';
 import { Form, Input } from 'formsy-semantic-ui-react';
+import { Link } from 'react-router-dom';
 
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  onValidSubmit = formData => {
+    this.props.onSubmitForm(formData);
+  };
+
   render() {
+    const errorLabel = <Label basic color="red" pointing />;
+
     return (
       <Fragment>
         <Card p={3}>
-          <Form>
+          <Form onValidSubmit={this.onValidSubmit}>
             <Flex flexDirection="column">
               <Box>
                 <Text mb={1}>Email</Text>
-                <Input required fluid name="email" placeholder="Email" />
+                <Input
+                  required
+                  fluid
+                  name="email"
+                  placeholder="Email"
+                  validations="isEmail"
+                  validationErrors={{
+                    isEmail: 'This is not a valid email',
+                    isDefaultRequiredValue: 'Email is Required',
+                  }}
+                  errorLabel={errorLabel}
+                />
                 <Text mb={1}>Password</Text>
                 <Input
                   type="Password"
@@ -24,6 +42,10 @@ class LoginForm extends React.Component {
                   fluid
                   name="password"
                   placeholder="Password"
+                  validationErrors={{
+                    isDefaultRequiredValue: 'Password is Required',
+                  }}
+                  errorLabel={errorLabel}
                 />
               </Box>
               <Box mt={2} />
@@ -35,8 +57,14 @@ class LoginForm extends React.Component {
                   </Button>
                 </Box>
                 <Box mt={[3, 2, 2]}>
-                  <Button icon labelPosition="right" secondary>
-                    Sign up
+                  <Button
+                    as={Link}
+                    to="/register"
+                    icon
+                    labelPosition="right"
+                    secondary
+                  >
+                    Register
                     <Icon name="signup" />
                   </Button>
                 </Box>

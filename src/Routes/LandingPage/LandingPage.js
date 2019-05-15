@@ -2,7 +2,9 @@ import React from 'react';
 import { Flex, Box } from 'rebass';
 import { Segment, Divider } from 'semantic-ui-react';
 import LoginForm from '../../Components/LoginForm';
+import RegisterForm from '../../Components/RegisterForm';
 import styled from 'styled-components';
+import { Route, withRouter } from 'react-router-dom';
 
 const FullFlex = styled(Flex)`
   height: 100vh;
@@ -14,7 +16,16 @@ class LandingPage extends React.Component {
     super(props);
   }
 
+  onSubmitLoginForm = data => {
+    console.log(data);
+  };
+
+  onSubmitRegisterForm = data => {
+    console.log(data);
+  };
+
   render() {
+    console.log(this.prop);
     return (
       <FullFlex flexWrap="wrap">
         <Box
@@ -33,7 +44,8 @@ class LandingPage extends React.Component {
           width={[1, 1, 1 / 2]}
         >
           <Segment raised style={{ maxWidth: '30em' }}>
-            <LoginForm />
+            <Route path="/" exact component={LoginForm} />
+            <Route path="/register" exact component={RegisterForm} />
           </Segment>
         </Flex>
       </FullFlex>
@@ -41,4 +53,4 @@ class LandingPage extends React.Component {
   }
 }
 
-export default LandingPage;
+export default withRouter(LandingPage);
