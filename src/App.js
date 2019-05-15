@@ -1,6 +1,7 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-import LoginForm from './LoginForm';
+import Main from './Routes/Main';
+import { Box } from 'rebass';
 
 class App extends React.Component {
   constructor(props) {
@@ -8,8 +9,9 @@ class App extends React.Component {
   }
 
   render() {
-    return <LoginForm />;
+    return <Main />;
   }
 }
 
 export default hot(module)(App);
+// export default App;
