@@ -5,6 +5,8 @@ import LoginForm from '../../Components/LoginForm';
 import RegisterForm from '../../Components/RegisterForm';
 import styled from 'styled-components';
 import { Route, withRouter } from 'react-router-dom';
+import api from '../../utils/api';
+import axios from 'axios';
 
 const FullFlex = styled(Flex)`
   height: 100vh;
@@ -16,16 +18,22 @@ class LandingPage extends React.Component {
     super(props);
   }
 
-  onSubmitLoginForm = data => {
-    console.log(data);
+  onSubmitLoginForm = async data => {
+    const response = await api.get('/');
+    console.log(response);
   };
 
-  onSubmitRegisterForm = data => {
-    console.log(data);
+  onSubmitRegisterForm = async data => {
+    try {
+      const res = await api.post('/auth/signup', data);
+      console.log(res);
+    } catch (err) {
+      const { data } = err.response;
+      console.log(data);
+    }
   };
 
   render() {
-    console.log(this.prop);
     return (
       <FullFlex flexWrap="wrap">
         <Box
@@ -44,8 +52,23 @@ class LandingPage extends React.Component {
           width={[1, 1, 1 / 2]}
         >
           <Segment raised style={{ maxWidth: '30em' }}>
-            <Route path="/" exact component={LoginForm} />
-            <Route path="/register" exact component={RegisterForm} />
+            <Route
+              path="/"
+              exact
+              render={props => (
+                <LoginForm {...props} onSubmitForm={this.onSubmitLoginForm} />
+              )}
+            />
+            <Route
+              path="/register"
+              exact
+              render={props => (
+                <RegisterForm
+                  {...props}
+                  onSubmitForm={this.onSubmitRegisterForm}
+                />
+              )}
+            />
           </Segment>
         </Flex>
       </FullFlex>
