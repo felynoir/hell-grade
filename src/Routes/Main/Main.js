@@ -1,5 +1,6 @@
 import React from 'react';
 import Responsive from '../../Components/ResponsiveContainer';
+import NavigationBar from '../../Components/NavigationBar';
 
 class Main extends React.Component {
   constructor(props) {
@@ -7,7 +8,9 @@ class Main extends React.Component {
   }
 
   render() {
-    return <div>hello</div>;
+    const menus = [{ name: 'Home', to: '' }, { name: 'Users', to: '' }];
+
+    return <NavigationBar menus={menus}>Kuy</NavigationBar>;
   }
 }
 

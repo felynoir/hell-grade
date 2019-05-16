@@ -43,6 +43,7 @@ const ResponsiveContainer = props => {
               );
             }
           }
+          i++;
         })}
       </Fragment>
     );
