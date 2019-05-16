@@ -9,14 +9,16 @@ import { Link, withRouter } from 'react-router-dom';
  * @param {Array<Object>} props.items - Menu items
  */
 class MenuItem extends React.Component {
-  state = {
-    activeA: colorSets['colorsA'][0],
-    activeB: colorSets['colorsB'][0],
-  };
+  constructor(props) {
+    super(props);
+    const { colorSet = 'colorsA' } = this.props;
+    console.log(colorSet);
+    this.state = {
+      active: colorSets[colorSet][0],
+    };
+  }
 
-  handleAClick = (e, { color }) => this.setState({ activeA: color });
-
-  handleBClick = (e, { color }) => this.setState({ activeB: color });
+  handleClick = (e, { color }) => this.setState({ active: color });
 
   render() {
     const {
@@ -24,7 +26,7 @@ class MenuItem extends React.Component {
       items,
       location: { pathname },
     } = this.props;
-    const { activeA, activeB } = this.state;
+    const { active } = this.state;
     return (
       <Fragment>
         {items.map((item, index) => {
@@ -35,8 +37,8 @@ class MenuItem extends React.Component {
               to={item.to || pathname}
               name={item.name}
               color={colorSets[colorSet][index]}
-              active={colorSets[colorSet][index] === activeA}
-              onClick={this.handleAClick}
+              active={colorSets[colorSet][index] === active}
+              onClick={item.onClick || this.handleClick}
             />
           );
         })}

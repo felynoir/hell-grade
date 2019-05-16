@@ -12,7 +12,6 @@ export const PrivateRoute = ({ component: Component, ...rest }) => {
           <Redirect
             to={{
               pathname: '/',
-              state: { message: 'Please Login to Code!' },
             }}
           />
         )

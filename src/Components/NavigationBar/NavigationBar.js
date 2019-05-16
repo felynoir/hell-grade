@@ -65,7 +65,7 @@ class NavigationBar extends Component {
   handleToggle = () => this.setState({ visible: !this.state.visible });
 
   render() {
-    const { menus, children } = this.props;
+    const { rightMenus, leftMenus, children } = this.props;
     const { visible } = this.state;
     return (
       <Fragment>
@@ -73,7 +73,7 @@ class NavigationBar extends Component {
           <NavBarMobile
             onToggle={this.handleToggle}
             visible={visible}
-            menus={menus}
+            menus={[...leftMenus, ...rightMenus]}
             onPusherClick={this.handlePusher}
           >
             <Box mt={'5em'}>{children}</Box>
@@ -81,7 +81,10 @@ class NavigationBar extends Component {
         </ResponsiveContainer>
         <ResponsiveContainer width={[0, 1, 1]}>
           <NoneRadiusMenu inverted>
-            <MenuItem items={menus} />
+            <MenuItem items={leftMenus} />
+            <NoneRadiusMenu.Menu position="right">
+              <MenuItem items={rightMenus} colorSet="colorsB" />
+            </NoneRadiusMenu.Menu>
           </NoneRadiusMenu>
           <Box m={3}>{children}</Box>
         </ResponsiveContainer>
