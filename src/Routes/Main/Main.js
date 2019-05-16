@@ -1,4 +1,5 @@
 import React from 'react';
+import Responsive from '../../Components/ResponsiveContainer';
 
 class Main extends React.Component {
   constructor(props) {
@@ -6,7 +7,7 @@ class Main extends React.Component {
   }
 
   render() {
-    return <div>Hello World</div>;
+    return <div>hello</div>;
   }
 }
 
