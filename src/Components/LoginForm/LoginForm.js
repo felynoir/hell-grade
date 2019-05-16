@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Button, Icon, Label } from 'semantic-ui-react';
+import { Button, Icon, Label, Message } from 'semantic-ui-react';
 import { Box, Card, Text, Flex } from 'rebass';
 import { Form, Input } from 'formsy-semantic-ui-react';
 import { Link } from 'react-router-dom';
@@ -9,13 +9,13 @@ class LoginForm extends React.Component {
     super(props);
   }
 
-  onValidSubmit = formData => {
-    this.props.onSubmitForm(formData);
+  onValidSubmit = (formData, reset) => {
+    this.props.onSubmitForm(formData, reset);
   };
 
   render() {
     const errorLabel = <Label basic color="red" pointing />;
-
+    const { error, resetError } = this.props;
     return (
       <Fragment>
         <Card p={3}>
@@ -49,6 +49,11 @@ class LoginForm extends React.Component {
                 />
               </Box>
               <Box mt={2} />
+              {error && (
+                <Box mt={2} mb={2}>
+                  <Message negative>{error}</Message>
+                </Box>
+              )}
               <Flex flexWrap="wrap" justifyContent="center">
                 <Box mt={[3, 2, 2]}>
                   <Button icon labelPosition="left" primary>
@@ -61,6 +66,7 @@ class LoginForm extends React.Component {
                     as={Link}
                     to="/register"
                     icon
+                    onClick={resetError}
                     labelPosition="right"
                     secondary
                   >

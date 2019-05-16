@@ -6,7 +6,7 @@ import RegisterForm from '../../Components/RegisterForm';
 import styled from 'styled-components';
 import { Route, withRouter } from 'react-router-dom';
 import api from '../../utils/api';
-import axios from 'axios';
+import { login } from '../../utils/authenticate';
 
 const FullFlex = styled(Flex)`
   height: 100vh;
@@ -16,24 +16,53 @@ const FullFlex = styled(Flex)`
 class LandingPage extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      errorLogin: '',
+      errorRegister: '',
+    };
   }
 
-  onSubmitLoginForm = async data => {
-    const response = await api.get('/');
-    console.log(response);
-  };
-
-  onSubmitRegisterForm = async data => {
+  onSubmitLoginForm = async (data, reset) => {
     try {
-      const res = await api.post('/auth/signup', data);
-      console.log(res);
+      const { history } = this.props;
+      const res = await api.post('/auth/signin', data);
+      login(res.data.token);
+      reset();
+      this.resetErrorLogin();
+      history.replace('/main');
     } catch (err) {
       const { data } = err.response;
-      console.log(data);
+      this.setState({
+        errorLogin: data.message,
+      });
     }
   };
 
+  onSubmitRegisterForm = async (data, reset) => {
+    try {
+      const res = await api.post('/auth/signup', data);
+      console.log(res);
+      reset();
+      this.resetErrorRegister();
+    } catch (err) {
+      const { data } = err.response;
+      console.log(err.response);
+      this.setState({
+        errorRegister: data.message,
+      });
+    }
+  };
+
+  resetErrorLogin = () => {
+    this.setState({ errorLogin: '' });
+  };
+
+  resetErrorRegister = () => {
+    this.setState({ errorRegister: '' });
+  };
+
   render() {
+    const { errorLogin, errorRegister } = this.state;
     return (
       <FullFlex flexWrap="wrap">
         <Box
@@ -51,12 +80,17 @@ class LandingPage extends React.Component {
           alignItems="center"
           width={[1, 1, 1 / 2]}
         >
-          <Segment raised style={{ maxWidth: '30em' }}>
+          <Segment raised style={{ maxWidth: '25em', width: '25em' }}>
             <Route
               path="/"
               exact
               render={props => (
-                <LoginForm {...props} onSubmitForm={this.onSubmitLoginForm} />
+                <LoginForm
+                  {...props}
+                  error={errorLogin}
+                  resetError={this.resetErrorLogin}
+                  onSubmitForm={this.onSubmitLoginForm}
+                />
               )}
             />
             <Route
@@ -65,6 +99,8 @@ class LandingPage extends React.Component {
               render={props => (
                 <RegisterForm
                   {...props}
+                  error={errorRegister}
+                  resetError={this.resetErrorRegister}
                   onSubmitForm={this.onSubmitRegisterForm}
                 />
               )}

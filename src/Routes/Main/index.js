@@ -1,12 +1,15 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
+import { AuthenRoute, PrivateRoute } from '../UtilsRoute';
 import LandingPage from '../LandingPage';
+import Main from './Main';
 
 export default () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path={['/', '/register']} exact component={LandingPage} />
+        <AuthenRoute path={['/', '/register']} exact component={LandingPage} />
+        <PrivateRoute path="/main" exact component={Main} />
       </Switch>
     </BrowserRouter>
   );
