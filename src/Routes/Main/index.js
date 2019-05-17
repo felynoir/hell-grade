@@ -3,6 +3,7 @@ import { BrowserRouter, Switch } from 'react-router-dom';
 import { AuthenRoute, PrivateRoute } from '../UtilsRoute';
 import LandingPage from '../LandingPage';
 import Main from './Main';
+import ProblemPage from '../ProblemPage';
 
 export default () => {
   return (
@@ -10,6 +11,7 @@ export default () => {
       <Switch>
         <AuthenRoute path={['/', '/register']} exact component={LandingPage} />
         <PrivateRoute path={['/main', '/main/:page']} exact component={Main} />
+        <PrivateRoute path="/problem/:id" exact component={ProblemPage} />
       </Switch>
     </BrowserRouter>
   );

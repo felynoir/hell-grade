@@ -111,5 +111,5 @@ class LandingPage extends React.Component {
     );
   }
 }
-
+// TODO: actually dont need to add withRouter HOC
 export default withRouter(LandingPage);
