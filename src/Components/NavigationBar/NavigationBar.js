@@ -23,6 +23,7 @@ const NavBarMobile = ({
   <Sidebar.Pushable>
     <Sidebar
       as={Menu}
+      size="huge"
       animation="push"
       direction="right"
       icon="labeled"
@@ -38,8 +39,8 @@ const NavBarMobile = ({
       onClick={onPusherClick}
       style={{ minHeight: '100vh' }}
     >
-      <Menu fixed="top" inverted>
-        <Menu.Item onClick={onToggle}>
+      <Menu fixed="top" size="large" inverted>
+        <Menu.Item onClick={onToggle} position="right">
           <Icon name="sidebar" />
         </Menu.Item>
       </Menu>
@@ -80,7 +81,7 @@ class NavigationBar extends Component {
           </NavBarMobile>
         </ResponsiveContainer>
         <ResponsiveContainer width={[0, 1, 1]}>
-          <NoneRadiusMenu inverted>
+          <NoneRadiusMenu size="large" inverted>
             <MenuItem items={leftMenus} />
             <NoneRadiusMenu.Menu position="right">
               <MenuItem items={rightMenus} colorSet="colorsB" />

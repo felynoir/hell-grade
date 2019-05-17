@@ -9,7 +9,7 @@ export default () => {
     <BrowserRouter>
       <Switch>
         <AuthenRoute path={['/', '/register']} exact component={LandingPage} />
-        <PrivateRoute path="/main" exact component={Main} />
+        <PrivateRoute path={['/main', '/main/:page']} exact component={Main} />
       </Switch>
     </BrowserRouter>
   );

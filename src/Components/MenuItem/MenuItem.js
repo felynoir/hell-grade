@@ -12,7 +12,6 @@ class MenuItem extends React.Component {
   constructor(props) {
     super(props);
     const { colorSet = 'colorsA' } = this.props;
-    console.log(colorSet);
     this.state = {
       active: colorSets[colorSet][0],
     };
