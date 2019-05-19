@@ -18,7 +18,7 @@ class ProblemList extends React.Component {
       Medium: 'yellow',
       Easy: 'green',
     };
-    const { problems, page, perPage } = this.props;
+    const { problems, page, perPage, match } = this.props;
     const listProblems = problems.slice((page - 1) * perPage, page * perPage);
     return (
       <Flex alignItems="center" flexDirection="column" p={[4, 2]}>
@@ -39,7 +39,7 @@ class ProblemList extends React.Component {
                       <Label ribbon color={ribbon[problem.rate]}>
                         {problem.rate}
                       </Label>
-                      <Link to="/">{problem.name}</Link>
+                      <Link to={problem.to || match.url}>{problem.name}</Link>
                     </Table.Cell>
                     <Table.Cell>{problem.sended}</Table.Cell>
                     <Table.Cell>{problem.passed}</Table.Cell>
