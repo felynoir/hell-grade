@@ -29,16 +29,20 @@ class SubmitCode extends Component {
     this.state = {
       file: null,
       fileName: '',
-      isUploading: false,
-      statusCode: '',
-      randomDate: '2.19',
+      language: 'C',
     };
   }
 
   onFormSubmit = e => {
     e.preventDefault(); // Stop form submit
-    console.log('form submit');
+    console.log('form submit', this.state);
     // this.fileUpload(this.state.file);
+  };
+
+  onFormChange = e => {
+    this.setState({
+      [e.target.id]: e.target.value,
+    });
   };
 
   fileChange = e => {
@@ -74,11 +78,34 @@ class SubmitCode extends Component {
   // };
 
   render() {
+    const languages = [
+      {
+        key: 'C',
+        text: 'C',
+        value: 'C',
+      },
+      {
+        key: 'C++',
+        text: 'C++',
+        value: 'C++',
+      },
+    ];
+    const { language, fileName } = this.state;
     return (
       <Flex>
         <Box width={1}>
           <Form onSubmit={this.onFormSubmit}>
-            <Form.Input fluid label="Date: " value={this.state.randomDate} />
+            <Form.Field>
+              <label>Select Language</label>
+              <Dropdown
+                fluid
+                defaultValue={language}
+                selection
+                id="language"
+                onChange={this.onFormChange}
+                options={languages}
+              />
+            </Form.Field>
             <Form.Field>
               <label>File input & upload </label>
               <Button
@@ -97,33 +124,16 @@ class SubmitCode extends Component {
               <Form.Input
                 fluid
                 label="File Chosen: "
-                placeholder="Use the above bar to browse your file system"
+                placeholder="Upload file before submit"
                 readOnly
-                value={this.state.fileName}
+                value={fileName}
               />
-              <Button style={{ marginTop: '20px' }} type="submit">
+              <Button
+                style={{ marginTop: '20px', margin: 'auto' }}
+                type="submit"
+              >
                 Upload
               </Button>
-              {/* {statusCode && statusCode === 200 ? (
-              <Progress
-              style={{ marginTop: '20px' }}
-                percent={100}
-                success
-                progress
-                >
-                File Upload Success
-              </Progress>
-            ) : statusCode && statusCode === 500 ? (
-              <Progress
-                style={{ marginTop: '20px' }}
-                percent={100}
-                error
-                active
-                progress
-                >
-                File Upload Failed
-                </Progress>
-              ) : null} */}
             </Form.Field>
           </Form>
         </Box>
