@@ -10,6 +10,16 @@ export const isAuthenticated = () => {
 };
 
 /**
+ * Verify jwt token
+ * @param {String} role - role user that require to logged in
+ * @returns {Boolean} isLoggedIn
+ */
+export const isAuthorize = role => {
+  const token = localStorage.getItem('token');
+  return !!token && hasRole(token) === role;
+};
+
+/**
  * Verify Token is expired or not.
  * @param {String} token - User's token.
  * @returns {Boolean} isExpired
@@ -25,6 +35,21 @@ export const isTokenExpired = token => {
   } catch (err) {
     console.log('expired check failed! Line 42: AuthService.js');
     return false;
+  }
+};
+
+/**
+ * Verify Token is expired or not.
+ * @param {String} token - User's token.
+ * @returns {Boolean} role
+ */
+export const hasRole = token => {
+  try {
+    const decoded = decode(token);
+    return decoded.role;
+  } catch (err) {
+    console.log('Role check failed! Line 51: AuthService.js');
+    return null;
   }
 };
 

@@ -18,10 +18,7 @@ const ProblemDetail = ({ problem }) => {
       </Card.Content>
       <Card.Content>
         <Flex justifyContent="space-between">
-          <Box>
-            <Icon name="time" />
-            {problem.time}
-          </Box>
+          {' '}
           <Box>
             <Icon name="hdd" />
             {problem.memory}
