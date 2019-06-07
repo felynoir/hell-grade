@@ -2,7 +2,7 @@ import axios from 'axios';
 // Set config defaults when creating the instance
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5555/api',
+  baseURL: 'http://localhost:5050/api',
 });
 
 // Alter defaults after instance has been created

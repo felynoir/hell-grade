@@ -6,6 +6,7 @@ import {
   Dropdown,
   Label,
 } from 'semantic-ui-react';
+import axios from 'axios';
 import { Form, Input } from 'formsy-semantic-ui-react';
 import { Flex, Box, Text } from 'rebass';
 
@@ -22,9 +23,27 @@ class ProblemManage extends Component {
     };
   }
 
-  onFormSubmit = data => {
+  onFormSubmit = async data => {
     console.log('form submit', this.state);
     console.log('data', data);
+    const { file } = this.state;
+    const reqForm = new FormData();
+    reqForm.append('problemFlie', file);
+    reqForm.append('data', JSON.stringify(data));
+    try {
+      axios.post('/file/upload/enpoint', reqForm).then(response => {
+        console.log(response);
+        console.log(response.status);
+        this.setState({ statusCode: response.status }, () => {
+          console.log(
+            'This is the response status code --->',
+            this.state.statusCode,
+          );
+        });
+      });
+    } catch (error) {
+      console.error(Error(`Error uploading file ${error.message}`));
+    }
   };
 
   handleChange = e => {
@@ -45,25 +64,6 @@ class ProblemManage extends Component {
       },
     );
   };
-
-  // fileUpload = async file => {
-  //   const formData = new FormData();
-  //   formData.append('file', file);
-  //   try {
-  //     axios.post('/file/upload/enpoint').then(response => {
-  //       console.log(response);
-  //       console.log(response.status);
-  //       this.setState({ statusCode: response.status }, () => {
-  //         console.log(
-  //           'This is the response status code --->',
-  //           this.state.statusCode,
-  //         );
-  //       });
-  //     });
-  //   } catch (error) {
-  //     console.error(Error(`Error uploading file ${error.message}`));
-  //   }
-  // };
 
   render() {
     const languages = [
