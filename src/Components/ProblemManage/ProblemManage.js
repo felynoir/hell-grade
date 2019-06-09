@@ -3,10 +3,10 @@ import {
   Button,
   Icon,
   Input as SemanticInput,
-  Dropdown,
+  Segment,
   Label,
 } from 'semantic-ui-react';
-import axios from 'axios';
+import api from '../../utils/api';
 import { Form, Input } from 'formsy-semantic-ui-react';
 import { Flex, Box, Text } from 'rebass';
 
@@ -18,7 +18,7 @@ class ProblemManage extends Component {
     super(props);
     this.state = {
       file: null,
-      fileName: '',
+      fileInput: [],
       time: 1,
     };
   }
@@ -26,20 +26,21 @@ class ProblemManage extends Component {
   onFormSubmit = async data => {
     console.log('form submit', this.state);
     console.log('data', data);
-    const { file } = this.state;
+
+    const { filePdf, fileInput, fileOutput } = this.state;
     const reqForm = new FormData();
-    reqForm.append('problemFlie', file);
+
+    reqForm.append('filePdf', filePdf[0]);
+    Object.keys(fileInput).map(key => {
+      reqForm.append('fileInput', fileInput[key]);
+    });
+    Object.keys(fileOutput).map(key => {
+      reqForm.append('fileOutput', fileOutput[key]);
+    });
     reqForm.append('data', JSON.stringify(data));
     try {
-      axios.post('/file/upload/enpoint', reqForm).then(response => {
-        console.log(response);
+      api.post('/problem/upload', reqForm).then(response => {
         console.log(response.status);
-        this.setState({ statusCode: response.status }, () => {
-          console.log(
-            'This is the response status code --->',
-            this.state.statusCode,
-          );
-        });
       });
     } catch (error) {
       console.error(Error(`Error uploading file ${error.message}`));
@@ -53,16 +54,7 @@ class ProblemManage extends Component {
   };
 
   fileChange = e => {
-    this.setState(
-      { file: e.target.files[0], fileName: e.target.files[0].name },
-      () => {
-        console.log(
-          'File chosen --->',
-          this.state.file,
-          console.log('File name  --->', this.state.fileName),
-        );
-      },
-    );
+    this.setState({ [e.target.id]: e.target.files });
   };
 
   render() {
@@ -78,7 +70,7 @@ class ProblemManage extends Component {
         value: 'C++',
       },
     ];
-    const { language, fileName, time } = this.state;
+    const { fileInput, fileOutput, filePdf } = this.state;
     const formMargin = 3;
     const errorLabel = <Label basic color="red" pointing />;
     return (
@@ -103,9 +95,9 @@ class ProblemManage extends Component {
                 <Text>File input & upload </Text>
                 <Button
                   as="label"
-                  htmlFor="file"
+                  htmlFor="filePdf"
                   type="button"
-                  color="violet"
+                  secondary
                   animated="fade"
                 >
                   <Button.Content visible>
@@ -115,20 +107,78 @@ class ProblemManage extends Component {
                 </Button>
                 <input
                   type="file"
-                  id="file"
-                  name="file"
+                  id="filePdf"
+                  name="filePdf"
                   accept=".pdf"
                   hidden
                   onChange={this.fileChange}
                 />
                 <Box mb={2} />
-                <SemanticInput
-                  fluid
-                  label="File Chosen"
-                  placeholder="Upload file before submit"
-                  readOnly
-                  value={fileName}
+                <Segment>{filePdf && filePdf[0].name}</Segment>
+              </Flex>
+              <Flex flexDirection="column" mb={formMargin}>
+                <Text>Input Files</Text>
+                <Button
+                  as="label"
+                  htmlFor="fileInput"
+                  type="button"
+                  secondary
+                  animated="fade"
+                >
+                  <Button.Content visible>
+                    <Icon name="file" />
+                  </Button.Content>
+                  <Button.Content hidden>Choose a File</Button.Content>
+                </Button>
+                <input
+                  type="file"
+                  id="fileInput"
+                  name="fileInput"
+                  accept=".in"
+                  hidden
+                  multiple
+                  onChange={this.fileChange}
                 />
+                <Box mb={1} />
+                <Segment>
+                  {fileInput &&
+                    Object.keys(fileInput).map(fn => {
+                      const file = fileInput[fn];
+                      return `[${file.name}] `;
+                    })}
+                </Segment>
+              </Flex>
+              <Flex flexDirection="column" mb={formMargin}>
+                <Text>Output Files</Text>
+                <Button
+                  as="label"
+                  htmlFor="fileOutput"
+                  type="button"
+                  secondary
+                  animated="fade"
+                >
+                  <Button.Content visible>
+                    <Icon name="file" />
+                  </Button.Content>
+                  <Button.Content hidden>Choose a File</Button.Content>
+                </Button>
+                <input
+                  type="file"
+                  id="fileOutput"
+                  name="fileOutput"
+                  accept=".sol"
+                  hidden
+                  multiple
+                  onChange={this.fileChange}
+                />
+                <Box mb={1} />
+                <Segment>
+                  {fileOutput &&
+                    Object.keys(fileOutput).map(fn => {
+                      const file = fileOutput[fn];
+                      return `[${file.name}] `;
+                    })}
+                </Segment>
               </Flex>
               <Box mb={formMargin}>
                 <Input
@@ -166,6 +216,8 @@ class ProblemManage extends Component {
               </Box>
               <Box>
                 <Button
+                  fluid
+                  color="teal"
                   style={{ marginTop: '20px', margin: 'auto' }}
                   type="submit"
                 >
