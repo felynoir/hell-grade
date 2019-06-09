@@ -20,9 +20,6 @@ import {
 
 import { Flex, Box } from 'rebass';
 
-// let d = addYears(new Date('2015-01-01T00:00'), 1);
-// let f = format(d, 'YYYY-MM-DD');
-
 class SubmitCode extends Component {
   constructor(props) {
     super(props);
@@ -33,49 +30,23 @@ class SubmitCode extends Component {
     };
   }
 
-  onFormSubmit = e => {
-    e.preventDefault(); // Stop form submit
-    console.log('form submit', this.state);
-    // this.fileUpload(this.state.file);
-  };
-
-  onFormChange = e => {
+  onFormChange = (e, { id, value }) => {
     this.setState({
-      [e.target.id]: e.target.value,
+      [id]: value,
     });
   };
 
   fileChange = e => {
-    this.setState(
-      { file: e.target.files[0], fileName: e.target.files[0].name },
-      () => {
-        console.log(
-          'File chosen --->',
-          this.state.file,
-          console.log('File name  --->', this.state.fileName),
-        );
-      },
-    );
+    this.setState({
+      [e.target.id]: e.target.files[0],
+      fileName: e.target.files[0].name,
+    });
   };
 
-  // fileUpload = async file => {
-  //   const formData = new FormData();
-  //   formData.append('file', file);
-  //   try {
-  //     axios.post('/file/upload/enpoint').then(response => {
-  //       console.log(response);
-  //       console.log(response.status);
-  //       this.setState({ statusCode: response.status }, () => {
-  //         console.log(
-  //           'This is the response status code --->',
-  //           this.state.statusCode,
-  //         );
-  //       });
-  //     });
-  //   } catch (error) {
-  //     console.error(Error(`Error uploading file ${error.message}`));
-  //   }
-  // };
+  onSubmit = () => {
+    const { handleSubmit } = this.props;
+    handleSubmit(this.state);
+  };
 
   render() {
     const languages = [
@@ -94,7 +65,7 @@ class SubmitCode extends Component {
     return (
       <Flex>
         <Box width={1}>
-          <Form onSubmit={this.onFormSubmit}>
+          <Form onSubmit={this.onSubmit}>
             <Form.Field>
               <label>Select Language</label>
               <Dropdown
@@ -120,7 +91,13 @@ class SubmitCode extends Component {
                 </Button.Content>
                 <Button.Content hidden>Choose a File</Button.Content>
               </Button>
-              <input type="file" id="file" hidden onChange={this.fileChange} />
+              <input
+                type="file"
+                id="file"
+                accept=".c,.cpp"
+                hidden
+                onChange={this.fileChange}
+              />
               <Form.Input
                 fluid
                 label="File Chosen: "
@@ -131,6 +108,8 @@ class SubmitCode extends Component {
               <Button
                 style={{ marginTop: '20px', margin: 'auto' }}
                 type="submit"
+                color="teal"
+                fluid
               >
                 Upload
               </Button>

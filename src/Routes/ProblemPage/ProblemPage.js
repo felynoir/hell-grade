@@ -12,7 +12,7 @@ import {
 } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import ScoreBoard from '../../Components/ScoreBoard';
-import SubmitCode from '../../Components/SubmitCode';
+import SubmitCode from './SubmitCode';
 import { PdfViewer } from '../../Components/EmbeddedView';
 import api from '../../utils/api';
 
@@ -65,7 +65,7 @@ class ProblemPage extends React.Component {
 
   render() {
     const { problem } = this.state;
-    const pdf = problem ? problem.pdf : null;
+    const { pdf, _id } = problem ? problem : {};
     const panes = [
       {
         menuItem: 'Problem',
@@ -89,7 +89,7 @@ class ProblemPage extends React.Component {
         menuItem: 'Submit',
         render: () => (
           <Tab.Pane>
-            <SubmitCode />
+            <SubmitCode id={_id} />
           </Tab.Pane>
         ),
       },
