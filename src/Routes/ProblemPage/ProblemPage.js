@@ -1,27 +1,39 @@
 import React from 'react';
 import { Flex, Box } from 'rebass';
-import { Card, Icon, Button, Tab } from 'semantic-ui-react';
+import {
+  Card,
+  Icon,
+  Button,
+  Tab,
+  Dimmer,
+  Loader,
+  Image,
+  Segment,
+} from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import ScoreBoard from '../../Components/ScoreBoard';
 import SubmitCode from '../../Components/SubmitCode';
 import { PdfViewer } from '../../Components/EmbeddedView';
+import api from '../../utils/api';
 
-const ProblemDetail = ({ problem }) => {
+const ProblemDetail = ({
+  problem: { name, author, description, memory, time },
+}) => {
   return (
     <Card fluid color="red">
       <Card.Content>
-        <Card.Header>{problem.name}</Card.Header>
-        <Card.Meta>{problem.author}</Card.Meta>
-        {problem.description && (
-          <Card.Description>{problem.description}</Card.Description>
-        )}
+        <Card.Header>{name}</Card.Header>
+        <Card.Meta>{author}</Card.Meta>
+        {description && <Card.Description>{description}</Card.Description>}
       </Card.Content>
       <Card.Content>
         <Flex justifyContent="space-between">
-          {' '}
           <Box>
-            <Icon name="hdd" />
-            {problem.memory}
+            <Icon name="clock" />
+            {time} s
+          </Box>
+          <Box>
+            {memory} MB <Icon name="hdd" />
           </Box>
         </Flex>
       </Card.Content>
@@ -33,32 +45,34 @@ class ProblemPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      errorLogin: '',
-      errorRegister: '',
+      problem: null,
     };
   }
 
-  handleClickBack = () => {
-    const { history } = this.props;
-    console.log(history);
-    // history.goBack();
+  componentDidMount = async () => {
+    const {
+      match: { params },
+    } = this.props;
+    const { name } = params;
+    try {
+      const { data } = await api.get(`/problem/${name}`);
+      this.setState({ problem: data });
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   render() {
-    const problem = {
-      name: 'Problem Name',
-      author: 'Author',
-      time: '1s',
-      memory: '64MB',
-      description: 'eiei',
-    };
+    const { problem } = this.state;
+    const pdf = problem ? problem.pdf : null;
     const panes = [
       {
         menuItem: 'Problem',
         render: () => (
           <Tab.Pane>
             <Box style={{ height: '500px' }}>
-              <PdfViewer url="https://www.codecube.in.th/judge/docs/160.pdf#page=1" />
+              {pdf && <PdfViewer url={pdf} />}
             </Box>
           </Tab.Pane>
         ),
@@ -95,15 +109,22 @@ class ProblemPage extends React.Component {
       { problem: 'Problem name', time: '0.05', score: 'PPPP' },
       { problem: 'Problem name', time: '0.05', score: 'PPPP' },
     ];
-
     return (
       <Flex flexWrap="wrap" p={3} flexDirection="column">
-        <Flex>
-          <ProblemDetail problem={problem} />
-        </Flex>
-        <Box mt={3}>
-          <Tab panes={panes} />
-        </Box>
+        {problem ? (
+          <div>
+            <Flex>
+              <ProblemDetail problem={problem} />
+            </Flex>
+            <Box mt={3}>
+              <Tab panes={panes} />
+            </Box>
+          </div>
+        ) : (
+          <Segment>
+            <Loader active inline="centered" />
+          </Segment>
+        )}
       </Flex>
     );
   }

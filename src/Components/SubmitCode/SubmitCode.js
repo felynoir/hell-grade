@@ -112,7 +112,7 @@ class SubmitCode extends Component {
                 as="label"
                 htmlFor="file"
                 type="button"
-                color="violet"
+                secondary
                 animated="fade"
               >
                 <Button.Content visible>

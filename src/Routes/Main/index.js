@@ -8,14 +8,14 @@ import ProblemPage from '../ProblemPage';
 import ProblemManage from '../ProblemManage';
 import { logout } from '../../utils/authenticate';
 
-const leftMenus = [{ name: 'Home', to: '' }, { name: 'Users', to: '' }];
+const leftMenus = [{ name: 'Home', to: '/main' }, { name: 'Users', to: '' }];
 const rightMenus = [{ name: 'Logout', onClick: logout }];
 
 const MainApp = () => (
   <NavigationBar leftMenus={leftMenus} rightMenus={rightMenus}>
     <Switch>
       <PrivateRoute path={['/main', '/main/:page']} exact component={Main} />
-      <PrivateRoute path="/problem/:id" exact component={ProblemPage} />
+      <PrivateRoute path="/problem/:name" exact component={ProblemPage} />
       <AdminRoute path="/manage" exact component={ProblemManage} />
       <Route render={() => <div>404</div>} />
     </Switch>
